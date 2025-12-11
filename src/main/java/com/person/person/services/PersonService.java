@@ -1,5 +1,6 @@
 package com.person.person.services;
 
+import com.person.person.dto.PersonDTO;
 import com.person.person.dto.PersonDepDTO;
 import com.person.person.entities.Department;
 import com.person.person.entities.Person;
@@ -29,6 +30,7 @@ public class PersonService {
         return new PersonDepDTO(person);
     }
 
+    /// Alinhado com a classe department
     @Transactional
     public PersonDepDTO insert(PersonDepDTO dto){
         Person entity = new Person();
@@ -46,6 +48,26 @@ public class PersonService {
         entity = repository.save(entity);
 
         return new PersonDepDTO(entity);
+    }
+
+    /// Não alinhado com a classe Depatment
+    @Transactional
+    public PersonDTO insert(PersonDTO dto){
+        Person entity = new Person();
+        entity.setName(dto.getName());
+        entity.setSalary(dto.getSalary());
+
+        /// não retorna o departamento no postman
+        //Department dep = new Department();
+        //dep.setId(dto.getDepartmentId());
+
+        /// retorna o departamento no postman
+        Department dep = departmentRepository.getReferenceById(dto.getDepartmentId());
+
+        entity.setDepartment(dep);
+        entity = repository.save(entity);
+
+        return new PersonDTO(entity);
     }
 
 }

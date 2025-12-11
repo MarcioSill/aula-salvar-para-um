@@ -1,5 +1,6 @@
 package com.person.person.controllers;
 
+import com.person.person.dto.PersonDTO;
 import com.person.person.dto.PersonDepDTO;
 import com.person.person.services.PersonService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,16 @@ public class PersonControler {
         return ResponseEntity.ok(dto);
     }
 
-    @PostMapping
+    //@PostMapping
     public ResponseEntity<PersonDepDTO> insert(@RequestBody PersonDepDTO dto){
+        dto = service.insert(dto);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(dto.getId()).toUri();
+        return ResponseEntity.created(uri).body(dto);
+    }
+
+    @PostMapping
+    public ResponseEntity<PersonDTO> insert(@RequestBody PersonDTO dto){
         dto = service.insert(dto);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(dto.getId()).toUri();
